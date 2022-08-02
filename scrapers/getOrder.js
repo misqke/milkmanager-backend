@@ -10,7 +10,7 @@ const getOrder = async (login, password) => {
       height: 800,
     },
     headless: false,
-    slowMo: 20,
+    slowMo: 50,
   });
 
   const page = await browser.newPage();
@@ -43,11 +43,40 @@ const getOrder = async (login, password) => {
     await page.keyboard.press("Enter");
     await page.waitForSelector(".delivery");
     await page.click(".delivery");
+    // collect milk data
+    await page.waitForSelector("td");
+    const milks = await page.evaluate(() => {
+      const milkList = [];
+      const tableRows = document.querySelectorAll(
+        "#grouped-gridview > div.k-grid-content.k-auto-scrollable > table > tbody > tr"
+      );
+      for (let i = 0; i < tableRows.length; i++) {
+        const id = tableRows[i].querySelector("td:nth-child(8)").innerText;
+        const previous =
+          tableRows[i].querySelector("td:nth-child(1)").innerText;
+        const name = tableRows[i].querySelector("td:nth-child(7)").innerText;
+        const multiplier =
+          tableRows[i].querySelector("td:nth-child(13)").innerText;
+        const fourWeekAvg =
+          tableRows[i].querySelector("td:nth-child(14)").innerText;
+        const newMilk = {
+          id,
+          previous,
+          name,
+          multiplier: Number(multiplier),
+          perWeekAvg: Math.floor(Number(fourWeekAvg) / 4),
+        };
+        milkList.push(newMilk);
+      }
+      return milkList;
+    });
 
-    // await browser.close();
+    await browser.close();
+    return { storeInfo, milks };
   } catch (error) {
     console.log(error);
     await browser.close();
+    return { error: "failed to get milks" };
   }
 };
 

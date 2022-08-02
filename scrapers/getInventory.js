@@ -27,6 +27,13 @@ const getInventory = async (login, password) => {
       await browser.close();
       return { error: "invalid login or password" };
     }
+    // get store info
+    const storeInfo = await page.evaluate(() => {
+      const store = document.querySelector(
+        "#listView > div > div.col-5.col-md-3 > span"
+      ).innerText;
+      return store;
+    });
     // select inventory
     await page.click(
       "#listView > div > div.col-3.col-md-2.col-lg-1 > span > a"
@@ -52,16 +59,19 @@ const getInventory = async (login, password) => {
         const name = tableRows[i].querySelector("td:nth-child(9)").innerText;
         const multiplier =
           tableRows[i].querySelector("td:nth-child(11)").innerText;
-        milkList.push({ name, multiplier });
+        const id = tableRows[i].querySelector("td:nth-child(10)").innerText;
+        milkList.push({ id, name, multiplier });
       }
       return milkList;
     });
 
     // close browser
     await browser.close();
+    return milks;
   } catch (error) {
     console.log(error);
     await browser.close();
+    return { error: "failed to get milks" };
   }
 };
 
