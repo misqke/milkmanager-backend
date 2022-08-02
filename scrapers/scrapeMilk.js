@@ -2,22 +2,22 @@ require("dotenv").config();
 const puppeteer = require("puppeteer");
 const url = "https://orders.deanfoods.com/";
 
-const getOrder = async (login, password) => {
+const scrapeMilk = async (username, password) => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "-disable-setuid-sandbox"],
     defaultViewport: {
       width: 380,
       height: 800,
     },
-    headless: false,
-    slowMo: 50,
+    // headless: false,
+    // slowMo: 10,
   });
 
   const page = await browser.newPage();
   try {
     // login
     await page.goto(url);
-    await page.type("#ProfileID", login);
+    await page.type("#ProfileID", username);
     await page.type("#AppPwd", password);
     await page.keyboard.press("Enter");
     // check if login successfull
@@ -44,7 +44,7 @@ const getOrder = async (login, password) => {
     await page.waitForSelector(".delivery");
     await page.click(".delivery");
     // collect milk data
-    await page.waitForSelector("td");
+    await page.waitForTimeout(1000);
     const milks = await page.evaluate(() => {
       const milkList = [];
       const tableRows = document.querySelectorAll(
@@ -80,4 +80,4 @@ const getOrder = async (login, password) => {
   }
 };
 
-getOrder("gedm6386", "gemm22");
+module.exports = scrapeMilk;
