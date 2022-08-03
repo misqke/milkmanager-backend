@@ -22,7 +22,7 @@ const scrapeMilk = async (username, password) => {
     await page.keyboard.press("Enter");
     // check if login successfull
     try {
-      await page.waitForSelector(".store-button", { timeout: 5000 });
+      await page.waitForSelector(".store-button", { timeout: 3000 });
     } catch (error) {
       await browser.close();
       return { error: "invalid login or password" };
@@ -57,14 +57,23 @@ const scrapeMilk = async (username, password) => {
         const name = tableRows[i].querySelector("td:nth-child(7)").innerText;
         const multiplier =
           tableRows[i].querySelector("td:nth-child(13)").innerText;
-        const fourWeekAvg =
+        const weeklyAvg =
           tableRows[i].querySelector("td:nth-child(14)").innerText;
         const newMilk = {
           id,
           previous,
           name,
           multiplier: Number(multiplier),
-          perWeekAvg: Math.floor(Number(fourWeekAvg) / 4),
+          weeklyAvg,
+          inventory: {
+            stacks: 0,
+            crates: 0,
+            singles: 0,
+          },
+          order: {
+            stacks: 0,
+            crates: 0,
+          },
         };
         milkList.push(newMilk);
       }
