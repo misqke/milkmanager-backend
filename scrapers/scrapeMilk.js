@@ -1,5 +1,6 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
+const { getcolor } = require("../helpers");
 const url = "https://orders.deanfoods.com/";
 
 const scrapeMilk = async (username, password) => {
@@ -45,7 +46,7 @@ const scrapeMilk = async (username, password) => {
     await page.click(".delivery");
     // collect milk data
     await page.waitForTimeout(1000);
-    const milks = await page.evaluate(() => {
+    const milks = await page.evaluate((getcolor) => {
       const milkList = [];
       const tableRows = document.querySelectorAll(
         "#grouped-gridview > div.k-grid-content.k-auto-scrollable > table > tbody > tr"
@@ -66,13 +67,16 @@ const scrapeMilk = async (username, password) => {
           multiplier: Number(multiplier),
           weeklyAvg,
           inventory: {
-            stacks: 0,
-            crates: 0,
-            singles: 0,
+            stacks: "",
+            crates: "",
+            singles: "",
+            total: 0,
           },
           order: {
-            stacks: 0,
-            crates: 0,
+            stacks: "",
+            crates: "",
+            singles: "",
+            total: 0,
           },
         };
         milkList.push(newMilk);
@@ -81,6 +85,9 @@ const scrapeMilk = async (username, password) => {
     });
 
     await browser.close();
+    for (let i = 0; i < milks.length; i++) {
+      milks[i].color = getcolor(milks[i].name);
+    }
     return { storeInfo, milks };
   } catch (error) {
     console.log(error);
