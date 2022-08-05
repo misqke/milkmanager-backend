@@ -1,20 +1,24 @@
 require("dotenv").config();
 const { submitInventoryScraper, submitOrderScraper } = require("../scrapers");
 
-let confirmation = { message: "", image: "" };
+let confirmation = {};
 
 const runScraper = async (milks, username, password, demo, mode) => {
+  const confirmName = demo ? "DEMO" : username;
+
+  confirmation = { ...confirmation, [confirmName]: { message: "", image: "" } };
+
   if (mode === "inventory") {
-    confirmation.message = "Submitting inventory...";
-    confirmation.image = await submitInventoryScraper(
+    confirmation[confirmName].message = "Submitting Inventory...";
+    confirmation[confirmName].image = await submitInventoryScraper(
       milks,
       username,
       password,
       demo
     );
   } else if (mode === "order") {
-    confirmation.message = "Submitting order...";
-    confirmation.image = await submitOrderScraper(
+    confirmation[confirmName].message = "Submitting Order...";
+    confirmation[confirmName].image = await submitOrderScraper(
       milks,
       username,
       password,
@@ -44,12 +48,14 @@ const submitOrder = async (req, res) => {
 };
 
 const getConfirmation = async (req, res) => {
-  if (confirmation.image.length > 0) {
+  const { username } = req.query;
+
+  if (confirmation[username].image.length > 0) {
     setTimeout(() => {
-      confirmation = { message: "", image: "" };
+      confirmation[username] = { message: "", image: "" };
     }, 10000);
   }
-  res.status(200).json(confirmation);
+  res.status(200).json(confirmation[username]);
 };
 
 module.exports = { submitInventory, submitOrder, getConfirmation };
