@@ -11,7 +11,7 @@ const submitOrderScraper = async (milkList, username, password, demo) => {
       height: 600,
     },
     // headless: false,
-    // slowMo: 50,
+    // slowMo: 10,
   });
   const page = await browser.newPage();
 

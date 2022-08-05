@@ -12,7 +12,7 @@ const submitsRouter = require("./routes/submits");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors("*"));
 
 app.use("/api/milks", getMilkRouter);
 app.use("/api/submits", submitsRouter);

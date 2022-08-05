@@ -1,10 +1,18 @@
+require("dotenv").config();
 const { scrapeMilk } = require("../scrapers");
 
 const getMilkData = async (req, res) => {
-  const { username, password } = req.body;
+  let { username, password } = req.body;
+
   if (!username || !password) {
     return res.status(400).json({ error: "username and password required" });
   }
+
+  if (username === "DEMO" && password === "demo") {
+    username = process.env.DEANS_USERNAME;
+    password = process.env.DEANS_PASSWORD;
+  }
+
   try {
     const data = await scrapeMilk(username, password);
     if (data.error) {
