@@ -47,7 +47,7 @@ const getConfirmation = async (req, res) => {
   if (confirmation.image.length > 0) {
     setTimeout(() => {
       confirmation = { message: "", image: "" };
-    }, 20000);
+    }, 10000);
   }
   res.status(200).json(confirmation);
 };

@@ -49,7 +49,6 @@ const scrapeMilk = async (username, password) => {
       const dayName = date.split(",")[0].trim();
       return dayName;
     });
-    console.log(day);
     await page.click(".delivery");
     // collect milk data
     await page.waitForTimeout(1000);
