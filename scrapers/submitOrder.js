@@ -15,6 +15,15 @@ const submitOrderScraper = async (milkList, username, password, demo) => {
   });
   const page = await browser.newPage();
 
+  await page.setRequestInterception(true);
+  page.on("request", (req) => {
+    if (req.resourceType() === "image" || req.resourceType() === "font") {
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
   try {
     // send page to log in page
     await page.goto(url);
@@ -59,10 +68,10 @@ const submitOrderScraper = async (milkList, username, password, demo) => {
 
     // SUBMIT ORDER - PRODUCTION ONLY
 
-    if (demo === false) {
+    if (demo === true) {
       await page.hover("#btn-submit-order-details");
     } else {
-      await page.hover("#btn-submit-order-details");
+      await page.click("#btn-submit-order-details");
     }
 
     // screenshot confirmation and encode in base64
