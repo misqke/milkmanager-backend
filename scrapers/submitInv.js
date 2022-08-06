@@ -49,15 +49,8 @@ const submitInventoryScraper = async (milkList, username, password, demo) => {
         `tr:nth-child(${i + 1}) > td:nth-child(1) > input`,
         `${milkList[i]}`
       );
-      await page.keyboard.press("Tab");
-      await page.keyboard.press("Tab");
-      await page.keyboard.press("Tab");
-      await page.keyboard.press("Tab");
-    }
-    for (let i = 0; i < milkList.length; i++) {
       await page.click(` tr:nth-child(${i + 1}) > td:nth-child(2) > a > svg`);
     }
-
     await page.click("#action-review");
 
     // await review page
