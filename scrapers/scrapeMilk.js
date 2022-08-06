@@ -16,15 +16,6 @@ const scrapeMilk = async (username, password) => {
 
   const page = await browser.newPage();
 
-  await page.setRequestInterception(true);
-  page.on("request", (req) => {
-    if (req.resourceType() === "image" || req.resourceType() === "font") {
-      req.abort();
-    } else {
-      req.continue();
-    }
-  });
-
   try {
     // login
     await page.goto(url);
