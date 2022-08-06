@@ -7,7 +7,14 @@ const app = express();
 const getMilkRouter = require("./routes/getMilks");
 const submitsRouter = require("./routes/submits");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://milkmanager.netlify.app",
+      "https://milkmanager-demo.netlify.app",
+    ],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
