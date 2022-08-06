@@ -50,11 +50,6 @@ const submitOrder = async (req, res) => {
 const getConfirmation = async (req, res) => {
   const { username } = req.query;
 
-  if (confirmation[username].image.length > 0) {
-    setTimeout(() => {
-      confirmation[username] = { message: "", image: "" };
-    }, 10000);
-  }
   res.status(200).json(confirmation[username]);
 };
 
