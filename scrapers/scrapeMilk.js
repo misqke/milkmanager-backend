@@ -1,7 +1,8 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
 const { getcolor } = require("../helpers");
-const url = "https://orders.deanfoods.com/";
+
+const url = "https://orders.dfamilk.com/";
 
 const scrapeMilk = async (username, password) => {
   const browser = await puppeteer.launch({

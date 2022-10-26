@@ -12,6 +12,7 @@ app.use(
     origin: [
       "https://milkmanager.netlify.app",
       "https://milkmanager-demo.netlify.app",
+      "http://localhost:3000",
     ],
   })
 );

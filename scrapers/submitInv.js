@@ -1,6 +1,7 @@
 const fs = require("fs");
 const puppeteer = require("puppeteer");
-const url = "https://orders.deanfoods.com/";
+
+const url = "https://orders.dfamilk.com/";
 
 const submitInventoryScraper = async (milkList, username, password, demo) => {
   // start browser and open page
@@ -10,6 +11,8 @@ const submitInventoryScraper = async (milkList, username, password, demo) => {
       width: 360,
       height: 600,
     },
+    headless: false,
+    slowMo: 10,
   });
   const page = await browser.newPage();
 
